@@ -3,6 +3,7 @@ Taller 4 - Patrones Concurrentes
 Autor: Angie Xiomara Fuentes Montañez
 Fecha: (18/11/2025)
 """
+
 import threading, queue, time, random
 
 lock = threading.Lock()
@@ -12,7 +13,10 @@ cola = queue.Queue(maxsize=5)
 cant = {"producido": 0, "consumido": 0}
 
 def crear_pedido(id_prod, num):
-
+    """Se genera in pedido con datos especificos.
+    Args:
+        num (int): Numero secuencial del pedido. """
+    
     return{
         "id_pedido": f"P{id_prod}-{num}",
         "cliente": random.choice(clientes),
@@ -20,7 +24,12 @@ def crear_pedido(id_prod, num):
         "producto": random.choice(["Sandia", "Pera", "Manzana", "Uvas"])
     }
 
+
 def productor(id_prod):
+    """Los productores crean pedidos y se añaden a la cola.
+    Args:
+        id_prod(int): El id del productor asignado.
+    """
 
     print(f"Iniciando el productor {id_prod}")
 
@@ -29,15 +38,17 @@ def productor(id_prod):
         pedido = crear_pedido(id_prod, i)
         cola.put(pedido)
 
-
         with lock:
             cant["producido"] += 1
-
         print(f"[Productor {id_prod}] produjo: {pedido}")
     print(f"[Productor {id_prod}] finalizó.")
 
-def consumidor(id_cons):
 
+def consumidor(id_cons):
+    """Extrae elementos de la cola y los procesa.
+    Args:
+        id_cons(int): id del consumidor asignado."""
+    
     print(f"Iniciando el consumidor {id_cons}")
     while True:
         try:
@@ -51,18 +62,16 @@ def consumidor(id_cons):
         cola.task_done()
     print(f" [Consumidor {id_cons}] finalizó.")
 
-
 def main():
+    """Crea productores, consumidores y mide el tiempo total."""
 
     inicio = time.time()
 
     productores = [threading.Thread(target=productor, args=(i,)) for i in range(3)]
     consumidores = [threading.Thread(target=consumidor, args=(j,)) for j in range(4)]
 
-
     for h in productores: h.start()
     for h in consumidores: h.start()
-
     for h in productores + consumidores: h.join()
 
     fin = time.time()

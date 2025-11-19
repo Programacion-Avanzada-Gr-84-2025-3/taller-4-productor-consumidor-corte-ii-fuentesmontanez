@@ -16,18 +16,23 @@ cant = {"producido": 0, "consumido": 0}
 
 
 def crear_pedido(id_prod, num):
+    """Genera un pedido con datos aleatorios.
+    Args:
+        num (int): Número secuencial del pedido.
+    """
 
     return {
         "id_pedido": f"P{id_prod}-{num}",
         "cliente": random.choice(clientes),
-        "precio": round(random.uniform(700, 3000), 2),
+        "precio": round(random.uniform(1000, 6000), 2),
         "producto": random.choice(["Sandia", "Pera", "Manzana", "Uvas"])
     }
 
 
 def productor(id_prod):
+    """Los productores crean pedidos y los añaden a la cola."""
 
-    print(f"Iniciando el productor {id_prod}")
+    print(f"Iniciando el procesador de pedidos {id_prod}")
 
     for i in range(3):
         time.sleep(random.uniform(0.3, 1.2))
@@ -36,12 +41,13 @@ def productor(id_prod):
 
         with lock:
             cant["producido"] += 1
-
         print(f"[Productor {id_prod}] produjo: {pedido}")
+
     print(f"[Productor {id_prod}] finalizó.")
 
 
 def consumidor(id_cons):
+    """Extrae elementos de la cola y los procesa."""
 
     print(f"Iniciando el consumidor {id_cons}")
 
@@ -63,6 +69,7 @@ def consumidor(id_cons):
 
 
 def main():
+    """Crea productores y consumidores usando ThreadPoolExecutor."""
 
     inicio = time.time()
 
@@ -77,9 +84,10 @@ def main():
     fin = time.time()
 
     print("Resultados:")
-    print(f"Tiempo total: {fin - inicio:.2f} segundos")
+    print(f"Tiempo total: {fin-inicio:.2f} segundos")
     print(f"Pedidos producidos: {cant['producido']}")
     print(f"Pedidos consumidos: {cant['consumido']}")
-    
+
+
 if __name__ == "__main__":
     main()
