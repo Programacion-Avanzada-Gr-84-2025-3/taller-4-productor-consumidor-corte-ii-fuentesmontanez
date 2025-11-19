@@ -1,4 +1,4 @@
-Análisis:
+Análisis: Taller 4.
 
 Trabajo concurrente:
 Divide el trabajo en dos etapas, que evitan que existan bloqueos
