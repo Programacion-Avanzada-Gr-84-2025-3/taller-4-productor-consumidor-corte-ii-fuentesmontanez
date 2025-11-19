@@ -67,5 +67,10 @@ def main():
 
     fin = time.time()
 
+    print("Resultados:")
+    print(f"Tiempo total: {fin - inicio:.2f} segundos")
+    print(f"Pedidos producidos: {cant['producido']}")
+    print(f"Pedidos consumidos: {cant['consumido']}")
+
 if __name__ == "__main__":
     main()
